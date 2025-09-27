@@ -1,676 +1,921 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Menu, 
-  X, 
-  ExternalLink, 
-  Mail, 
-  Linkedin, 
-  Twitter, 
-  ArrowRight,
-  Calendar,
-  Download,
-  Eye,
-  Type,
-  Palette,
-  Settings,
-  Plus,
-  Minus,
-  RotateCcw
-} from 'lucide-react';
+import { ChevronRight, Download, ExternalLink, Calendar, ArrowLeft, Menu, X, ArrowUpRight, Mail, Linkedin, Github } from 'lucide-react';
 
-interface AccessibilitySettings {
-  fontSize: number;
-  dyslexiaFont: boolean;
-  highContrast: boolean;
-  colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
-}
+// Types
+type Page = 'home' | 'about' | 'work' | 'contact' | 'case-auditbar' | 'case-paysure' | 'case-summarizer';
 
-function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
-  const [showAccessibility, setShowAccessibility] = useState(false);
-  const [accessibilitySettings, setAccessibilitySettings] = useState<AccessibilitySettings>({
-    fontSize: 16,
-    dyslexiaFont: false,
-    highContrast: false,
-    colorBlindMode: 'none'
-  });
+// Enhanced case studies with recruiter-focused structure
+const caseStudies = {
+  auditbar: {
+    title: 'AuditBar',
+    subtitle: 'Financial Audit Management Platform',
+    description: 'Transforming complex audit workflows into intuitive digital experiences',
+    tags: ['B2B SaaS', 'Dashboard Design', 'Enterprise UX'],
+    year: '2024',
+    role: 'Lead Product Designer',
+    timeline: '6 months',
+    client: 'AuditBar Inc.',
+    challenge: 'Financial audit teams were drowning in fragmented workflows across multiple tools, leading to 60% of their time spent on administrative tasks instead of actual audit work. With missed deadlines costing firms an average of $50K per audit, we needed to create a unified platform that would streamline processes while maintaining strict compliance standards.',
+    process: 'I led a comprehensive design research initiative, conducting 15+ interviews with audit professionals across Big Four firms and mid-sized practices. Through contextual inquiries and workflow mapping, I identified critical pain points and designed solutions using an iterative approach with continuous stakeholder validation. I collaborated closely with engineering to ensure technical feasibility while maintaining design integrity.',
+    solution: 'I designed a unified dashboard featuring real-time progress tracking, automated notifications, and intelligent task prioritization. The solution included visual workflow mapping, contextual compliance guidance, and collaborative features that adapt to different audit types and team sizes. The interface provides relevant information at each stage while maintaining the complexity needed for professional audit work.',
+    impact: '• 40% reduction in audit completion time\n• 60% improvement in team collaboration scores\n• 95% user satisfaction rating\n• 12+ enterprise clients onboarded in first quarter\n• 89% client renewal rate\n• $2B+ in audited assets processed monthly',
+    reflection: 'This project taught me the critical importance of balancing comprehensive functionality with interface simplicity in enterprise software. The iterative approach with continuous user feedback was essential to success, and I learned that understanding complex business processes deeply is prerequisite to designing effective solutions.'
+  },
+  paysure: {
+    title: 'Paysure',
+    subtitle: 'Fintech Payment Solutions',
+    description: 'Democratizing digital payments for African small businesses',
+    tags: ['Fintech', 'Mobile-First', 'Emerging Markets'],
+    year: '2023',
+    role: 'Senior Product Designer',
+    timeline: '8 months',
+    client: 'Paysure Technologies',
+    challenge: 'Small businesses across Africa faced significant barriers to digital payment adoption: complex interfaces, high fees, low trust in digital systems, and inconsistent connectivity. Existing solutions were designed for Western markets or large enterprises, missing the unique needs of African SMEs who process millions in transactions but lack technical resources.',
+    process: 'I conducted extensive field research across Lagos, Nairobi, and Accra, interviewing 50+ merchants and analyzing payment behaviors in real-world contexts. I used human-centered design methodology with culturally-informed prototyping and local market testing. Working with regional teams, I ensured cultural appropriateness while maintaining technical excellence.',
+    solution: 'I designed a mobile-first payment application with simplified onboarding, transparent fee structure, and multi-language support. Key innovations included offline transaction capabilities, multiple payment methods integration, and trust-building elements like instant confirmations and accessible dispute resolution. The interface adapts to different literacy levels and technical comfort zones.',
+    impact: '• 200% increase in merchant adoption within first year\n• 45% reduction in transaction abandonment\n• 4.7-star average app store rating\n• Successful expansion to 5 new African markets\n• Transaction volume grew from $1M to $15M monthly\n• 78% of users report increased business revenue',
+    reflection: 'Working on Paysure reinforced that successful global products require deep cultural adaptation, not just translation. Local insights and community feedback were essential for creating solutions that truly serve users. I learned that inclusive design principles can drive both social impact and business success when applied thoughtfully.'
+  },
+  summarizer: {
+    title: 'Summarizer',
+    subtitle: 'AI-Powered Content Intelligence',
+    description: 'Making information overload manageable for knowledge workers',
+    tags: ['AI/ML', 'Productivity', 'B2B SaaS'],
+    year: '2024',
+    role: 'Product Designer',
+    timeline: '4 months',
+    client: 'Summarizer AI',
+    challenge: 'Knowledge workers receive 120+ emails daily and struggle with information overload, spending 2+ hours on document review instead of strategic analysis. With 85% of professionals reporting that information volume negatively impacts productivity, we needed to make AI-powered summarization accessible and trustworthy for everyday use.',
+    process: 'I collaborated closely with the AI/ML team to understand algorithm capabilities and limitations while surveying 200+ professionals about information consumption habits. I designed multiple interaction models and tested them extensively to find the optimal balance of automation and user control, ensuring transparency in AI decision-making throughout the experience.',
+    solution: 'I created an intuitive interface that transforms lengthy documents into actionable summaries with customizable detail levels. The design emphasizes AI transparency through confidence indicators, source referencing, and collaborative annotation tools. Progressive disclosure ensures users can access detailed information when needed without overwhelming the primary workflow.',
+    impact: '• 70% reduction in document processing time\n• 90% user satisfaction with summary quality\n• 50K+ active users within first quarter\n• Featured as TechCrunch "AI Tool of the Month"\n• Integration with 10+ productivity tools\n• 85% of users report improved decision-making speed',
+    reflection: 'Designing for AI required careful balance between powerful capabilities and user understanding. Transparency and explainability were key to building trust in AI-generated content. I learned that progressive disclosure in AI interfaces is crucial—showing enough information to build confidence without overwhelming users with technical complexity.'
+  }
+};
+
+const NavigationBar: React.FC<{
+  currentPage: Page;
+  onNavigate: (page: Page) => void;
+}> = ({ currentPage, onNavigate }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'work', 'contact'];
-      const scrollPosition = window.scrollY + 100;
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetHeight = element.offsetHeight;
-          
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
+      setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    // Apply accessibility settings
-    const root = document.documentElement;
-    root.style.fontSize = `${accessibilitySettings.fontSize}px`;
-    
-    if (accessibilitySettings.dyslexiaFont) {
-      root.style.fontFamily = 'OpenDyslexic, Arial, sans-serif';
-    } else {
-      root.style.fontFamily = '';
-    }
-
-    if (accessibilitySettings.highContrast) {
-      root.classList.add('high-contrast');
-    } else {
-      root.classList.remove('high-contrast');
-    }
-
-    root.className = root.className.replace(/colorblind-\w+/g, '');
-    if (accessibilitySettings.colorBlindMode !== 'none') {
-      root.classList.add(`colorblind-${accessibilitySettings.colorBlindMode}`);
-    }
-  }, [accessibilitySettings]);
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMenuOpen(false);
-  };
-
-  const resetAccessibility = () => {
-    setAccessibilitySettings({
-      fontSize: 16,
-      dyslexiaFont: false,
-      highContrast: false,
-      colorBlindMode: 'none'
-    });
-  };
-
-  const projects = [
-    {
-      title: "Fintech Dashboard Redesign",
-      description: "Led the complete redesign of a B2B fintech platform, improving user task completion by 40% and reducing support tickets by 60%.",
-      image: "https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800",
-      tags: ["B2B SaaS", "Fintech", "Dashboard Design"],
-      impact: "40% increase in task completion"
-    },
-    {
-      title: "Mobile Banking App",
-      description: "Designed a mobile-first banking experience that increased user engagement by 65% and improved accessibility scores to WCAG AA compliance.",
-      image: "https://images.pexels.com/photos/4386321/pexels-photo-4386321.jpeg?auto=compress&cs=tinysrgb&w=800",
-      tags: ["Mobile Design", "Banking", "Accessibility"],
-      impact: "65% increase in engagement"
-    },
-    {
-      title: "E-commerce Platform",
-      description: "Redesigned checkout flow resulting in 25% reduction in cart abandonment and $2M additional annual revenue.",
-      image: "https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800",
-      tags: ["E-commerce", "Conversion Optimization", "UX Research"],
-      impact: "$2M additional revenue"
-    }
-  ];
-
-  const websites = [
-    {
-      title: "TechStartup Landing Page",
-      description: "Modern, conversion-focused landing page for a B2B SaaS startup with integrated analytics and A/B testing.",
-      image: "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800",
-      url: "https://example-startup.com",
-      tags: ["Landing Page", "B2B SaaS", "Conversion"]
-    },
-    {
-      title: "Creative Agency Portfolio",
-      description: "Award-winning portfolio website featuring interactive animations and seamless user experience.",
-      image: "https://images.pexels.com/photos/196645/pexels-photo-196645.jpeg?auto=compress&cs=tinysrgb&w=800",
-      url: "https://example-agency.com",
-      tags: ["Portfolio", "Animation", "Creative"]
-    },
-    {
-      title: "E-learning Platform",
-      description: "Comprehensive online learning platform with course management, progress tracking, and interactive content.",
-      image: "https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800",
-      url: "https://example-learning.com",
-      tags: ["E-learning", "Dashboard", "Education"]
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-white text-gray-900 relative">
-      {/* Accessibility Panel */}
-      <div className={`fixed top-4 right-4 z-50 transition-all duration-300 ${showAccessibility ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-80">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900">Accessibility Options</h3>
-            <button
-              onClick={() => setShowAccessibility(false)}
-              className="p-1 hover:bg-gray-100 rounded"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          
-          <div className="space-y-4">
-            {/* Font Size */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Type className="w-4 h-4 inline mr-1" />
-                Font Size
-              </label>
-              <div className="flex items-center space-x-2">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      scrolled 
+        ? 'bg-black/95 backdrop-blur-xl border-b border-white/5' 
+        : 'bg-transparent'
+    }`}>
+      <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+        <button
+          onClick={() => onNavigate('home')}
+          className="group text-xl font-medium text-white hover:text-orange-400 transition-all duration-300 tracking-tight"
+        >
+          <span className="block transform group-hover:scale-105 transition-transform duration-200">
+            Bola Olaniyan
+          </span>
+        </button>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-10">
+          <button
+            onClick={() => onNavigate('work')}
+            className={`relative text-sm font-medium transition-all duration-300 tracking-wide ${
+              currentPage === 'work' || currentPage.startsWith('case-') 
+                ? 'text-orange-400' 
+                : 'text-gray-300 hover:text-white'
+            } group`}
+          >
+            Work
+            <span className={`absolute -bottom-1 left-0 h-px bg-orange-400 transition-all duration-300 ${
+              currentPage === 'work' || currentPage.startsWith('case-') ? 'w-full' : 'w-0 group-hover:w-full'
+            }`}></span>
+          </button>
+          <button
+            onClick={() => onNavigate('about')}
+            className={`relative text-sm font-medium transition-all duration-300 tracking-wide ${
+              currentPage === 'about' ? 'text-orange-400' : 'text-gray-300 hover:text-white'
+            } group`}
+          >
+            About
+            <span className={`absolute -bottom-1 left-0 h-px bg-orange-400 transition-all duration-300 ${
+              currentPage === 'about' ? 'w-full' : 'w-0 group-hover:w-full'
+            }`}></span>
+          </button>
+          <button
+            onClick={() => onNavigate('contact')}
+            className={`relative text-sm font-medium transition-all duration-300 tracking-wide ${
+              currentPage === 'contact' ? 'text-orange-400' : 'text-gray-300 hover:text-white'
+            } group`}
+          >
+            Contact
+            <span className={`absolute -bottom-1 left-0 h-px bg-orange-400 transition-all duration-300 ${
+              currentPage === 'contact' ? 'w-full' : 'w-0 group-hover:w-full'
+            }`}></span>
+          </button>
+          <button
+            onClick={() => onNavigate('contact')}
+            className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 flex items-center space-x-2"
+          >
+            <Mail size={16} />
+            <span>Let's Talk</span>
+            <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+          </button>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors duration-200"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`md:hidden transition-all duration-300 ${
+        isMobileMenuOpen 
+          ? 'max-h-96 bg-black/95 backdrop-blur-xl border-t border-white/5' 
+          : 'max-h-0 overflow-hidden'
+      }`}>
+        <div className="px-6 py-6 space-y-6">
+          <button
+            onClick={() => {
+              onNavigate('work');
+              setIsMobileMenuOpen(false);
+            }}
+            className="block w-full text-left text-gray-300 hover:text-white transition-colors font-medium"
+          >
+            Work
+          </button>
+          <button
+            onClick={() => {
+              onNavigate('about');
+              setIsMobileMenuOpen(false);
+            }}
+            className="block w-full text-left text-gray-300 hover:text-white transition-colors font-medium"
+          >
+            About
+          </button>
+          <button
+            onClick={() => {
+              onNavigate('contact');
+              setIsMobileMenuOpen(false);
+            }}
+            className="block w-full text-left text-gray-300 hover:text-white transition-colors font-medium"
+          >
+            Contact
+          </button>
+          <button
+            onClick={() => {
+              onNavigate('contact');
+              setIsMobileMenuOpen(false);
+            }}
+            className="block bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-3 rounded-full text-sm font-medium text-center transition-colors"
+          >
+            Let's Talk
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+const HomePage: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) => {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white">
+      {/* Hero Section */}
+      <section className="pt-28 pb-20 px-6 min-h-screen flex items-center">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid lg:grid-cols-12 gap-16 items-center">
+            <div className="lg:col-span-7 space-y-10">
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <h1 className="text-6xl lg:text-8xl font-bold leading-none tracking-tight">
+                    <span className="block">Bola</span>
+                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">
+                      Olaniyan
+                    </span>
+                  </h1>
+                  <div className="h-px w-24 bg-gradient-to-r from-orange-400 to-transparent"></div>
+                </div>
+                <p className="text-2xl lg:text-3xl text-gray-400 font-light leading-relaxed">
+                  Product Designer who makes apps easier to use and helps businesses grow
+                </p>
+              </div>
+              
+              <p className="text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-2xl font-light">
+                I design digital products that solve real problems, drive user adoption, 
+                and deliver measurable business results for growing teams.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
                 <button
-                  onClick={() => setAccessibilitySettings(prev => ({ 
-                    ...prev, 
-                    fontSize: Math.max(12, prev.fontSize - 2) 
-                  }))}
-                  className="p-1 border rounded hover:bg-gray-50"
+                  onClick={() => onNavigate('work')}
+                  className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-medium hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 flex items-center space-x-3"
                 >
-                  <Minus className="w-4 h-4" />
+                  <span>View My Work</span>
+                  <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform duration-200" />
                 </button>
-                <span className="text-sm px-2">{accessibilitySettings.fontSize}px</span>
-                <button
-                  onClick={() => setAccessibilitySettings(prev => ({ 
-                    ...prev, 
-                    fontSize: Math.min(24, prev.fontSize + 2) 
-                  }))}
-                  className="p-1 border rounded hover:bg-gray-50"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
+                
+                <div className="flex items-center space-x-3 text-green-400">
+                  <div className="relative">
+                    <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                    <div className="absolute inset-0 w-3 h-3 bg-green-400 rounded-full animate-ping opacity-20"></div>
+                  </div>
+                  <span className="text-sm font-medium tracking-wide">Available for new opportunities</span>
+                </div>
               </div>
             </div>
 
-            {/* Dyslexia Font */}
-            <div>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={accessibilitySettings.dyslexiaFont}
-                  onChange={(e) => setAccessibilitySettings(prev => ({ 
-                    ...prev, 
-                    dyslexiaFont: e.target.checked 
-                  }))}
-                  className="rounded"
-                />
-                <span className="text-sm">Dyslexia-friendly font</span>
-              </label>
+            {/* Hero Visual - Enhanced AuditBar Mockup */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative transform hover:scale-105 transition-all duration-700">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent rounded-3xl blur-3xl"></div>
+                <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-8 shadow-2xl border border-gray-700/50 backdrop-blur-sm">
+                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 mb-6 border border-gray-600/30">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="w-4 h-4 bg-red-500 rounded-full shadow-lg"></div>
+                      <div className="w-4 h-4 bg-yellow-500 rounded-full shadow-lg"></div>
+                      <div className="w-4 h-4 bg-green-500 rounded-full shadow-lg"></div>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="h-6 bg-gradient-to-r from-orange-400 to-orange-600 rounded-lg w-36 shadow-lg"></div>
+                        <div className="h-4 bg-gray-600 rounded w-20"></div>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="h-3 bg-gray-600 rounded w-full opacity-80"></div>
+                        <div className="h-3 bg-gray-600 rounded w-4/5 opacity-60"></div>
+                        <div className="h-3 bg-gray-600 rounded w-3/5 opacity-40"></div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-4 mt-8">
+                        <div className="h-20 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl border border-gray-600/20"></div>
+                        <div className="h-20 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl border border-gray-600/20"></div>
+                        <div className="h-20 bg-gradient-to-br from-orange-500/20 to-gray-800 rounded-xl border border-orange-500/20"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-gray-400 font-medium tracking-wide">AuditBar Dashboard</p>
+                    <div className="h-px w-16 bg-gradient-to-r from-transparent via-orange-400 to-transparent mx-auto mt-2"></div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* High Contrast */}
-            <div>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  checked={accessibilitySettings.highContrast}
-                  onChange={(e) => setAccessibilitySettings(prev => ({ 
-                    ...prev, 
-                    highContrast: e.target.checked 
-                  }))}
-                  className="rounded"
-                />
-                <span className="text-sm">High contrast mode</span>
-              </label>
-            </div>
-
-            {/* Color Blind Support */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Palette className="w-4 h-4 inline mr-1" />
-                Color Vision Support
-              </label>
-              <select
-                value={accessibilitySettings.colorBlindMode}
-                onChange={(e) => setAccessibilitySettings(prev => ({ 
-                  ...prev, 
-                  colorBlindMode: e.target.value as any 
-                }))}
-                className="w-full p-2 border rounded text-sm"
+      {/* Case Studies Section */}
+      <section className="py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl lg:text-6xl font-bold mb-6 tracking-tight">Featured Work</h2>
+            <div className="h-px w-24 bg-gradient-to-r from-orange-400 to-transparent mx-auto mb-6"></div>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              Real projects with measurable impact for startups and growing teams
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-3 gap-12">
+            {Object.entries(caseStudies).map(([key, study], index) => (
+              <div
+                key={key}
+                className="group cursor-pointer"
+                onClick={() => onNavigate(`case-${key}` as Page)}
               >
-                <option value="none">Normal vision</option>
-                <option value="protanopia">Protanopia (Red-blind)</option>
-                <option value="deuteranopia">Deuteranopia (Green-blind)</option>
-                <option value="tritanopia">Tritanopia (Blue-blind)</option>
-              </select>
+                <div className="space-y-6">
+                  <div className="aspect-[4/3] bg-gradient-to-br from-orange-500/10 via-gray-900 to-gray-950 rounded-2xl overflow-hidden relative border border-gray-800/50 group-hover:border-orange-500/30 transition-all duration-500">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div className="h-full flex items-center justify-center">
+                      <span className="text-4xl font-bold text-orange-400 group-hover:scale-110 transition-transform duration-300">
+                        {study.title}
+                      </span>
+                    </div>
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                      <ArrowUpRight size={24} className="text-orange-400" />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-orange-400 tracking-wide">{study.year}</span>
+                      <div className="flex flex-wrap gap-2">
+                        {study.tags.slice(0, 2).map((tag, tagIndex) => (
+                          <span
+                            key={tagIndex}
+                            className="px-3 py-1 bg-gray-900 text-xs rounded-full text-gray-400 border border-gray-800"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-2xl font-bold mb-2 group-hover:text-orange-400 transition-colors duration-300">
+                        {study.title}
+                      </h3>
+                      <p className="text-gray-500 mb-3 font-medium">{study.subtitle}</p>
+                      <p className="text-gray-400 leading-relaxed">{study.description}</p>
+                    </div>
+
+                    <div className="pt-2">
+                      <span className="inline-flex items-center space-x-2 text-orange-400 group-hover:text-orange-300 transition-colors font-medium text-sm">
+                        <span>View Case Study</span>
+                        <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 px-6">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
+            Let's build something great together
+          </h2>
+          <p className="text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
+            I'm always interested in discussing new opportunities and challenging projects.
+          </p>
+          <button
+            onClick={() => onNavigate('contact')}
+            className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-medium hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 inline-flex items-center space-x-3"
+          >
+            <Mail size={20} />
+            <span>Contact Me</span>
+            <ArrowUpRight size={20} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+const AboutPage: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) => {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white pt-24">
+      <div className="max-w-5xl mx-auto px-6 py-20">
+        <div className="grid lg:grid-cols-5 gap-16">
+          <div className="lg:col-span-3 space-y-12">
+            <div className="space-y-8">
+              <div>
+                <h1 className="text-5xl lg:text-7xl font-bold mb-6 tracking-tight">About Bola</h1>
+                <div className="h-px w-24 bg-gradient-to-r from-orange-400 to-transparent"></div>
+              </div>
+              <p className="text-2xl text-gray-300 leading-relaxed font-light">
+                I'm a product designer who believes the best solutions emerge when 
+                user needs and business goals align perfectly.
+              </p>
             </div>
 
-            {/* Reset Button */}
-            <button
-              onClick={resetAccessibility}
-              className="w-full flex items-center justify-center space-x-2 p-2 border border-gray-300 rounded hover:bg-gray-50 text-sm"
-            >
-              <RotateCcw className="w-4 h-4" />
-              <span>Reset to defaults</span>
-            </button>
+            <div className="space-y-8 text-gray-300 leading-relaxed text-lg">
+              <p>
+                Over the past 6 years, I've partnered with startups and scale-ups across fintech, 
+                SaaS, and AI/ML spaces, helping them design products that users genuinely want to use. 
+                My approach combines analytical thinking with creative problem-solving, always 
+                grounded in real user research and measurable business outcomes.
+              </p>
+
+              <p>
+                Starting my career in Lagos, Nigeria, I quickly learned that effective design 
+                goes far beyond aesthetics—it's about understanding complex business challenges 
+                and crafting solutions that work for both users and organizations. This perspective 
+                has shaped my methodology, from initial research through final implementation.
+              </p>
+
+              <p>
+                I specialize in dashboard design and complex B2B workflows, where I thrive on 
+                the challenge of making sophisticated systems feel intuitive and accessible. 
+                My work has helped teams reduce task completion time by up to 70% while 
+                improving user satisfaction scores across multiple products.
+              </p>
+
+              <p>
+                When I'm not designing, I contribute to design communities, mentor emerging 
+                designers, and explore new tools that push creative boundaries. I believe 
+                in continuous learning and sharing knowledge to elevate the entire design community.
+              </p>
+            </div>
+
+            <div className="pt-8">
+              <h3 className="text-2xl font-bold mb-6">My Approach</h3>
+              <ul className="space-y-4 text-gray-300">
+                <li className="flex items-start space-x-4">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <span className="text-lg">Research-driven design decisions backed by user data</span>
+                </li>
+                <li className="flex items-start space-x-4">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <span className="text-lg">Systems thinking for scalable, consistent experiences</span>
+                </li>
+                <li className="flex items-start space-x-4">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <span className="text-lg">Collaborative process with cross-functional teams</span>
+                </li>
+                <li className="flex items-start space-x-4">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-3 flex-shrink-0"></div>
+                  <span className="text-lg">Measurable impact on user satisfaction and business metrics</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="pt-8 space-y-6">
+              <button className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-medium hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 flex items-center space-x-3">
+                <Download size={20} />
+                <span>Download Resume</span>
+                <ArrowUpRight size={20} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+              </button>
+              
+              <div className="pt-4">
+                <p className="text-gray-400 mb-4">Let's build something great together</p>
+                <button
+                  onClick={() => onNavigate('contact')}
+                  className="group inline-flex items-center space-x-2 text-orange-400 hover:text-orange-300 transition-colors font-medium"
+                >
+                  <span>Contact Me</span>
+                  <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-2">
+            <div className="sticky top-32">
+              <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-sm">
+                <div className="aspect-square bg-gradient-to-br from-orange-500/20 via-gray-800 to-gray-900 rounded-2xl mb-8 flex items-center justify-center border border-gray-700/30">
+                  <span className="text-6xl">👨‍💻</span>
+                </div>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Status</h4>
+                    <p className="text-gray-300">Available for new opportunities</p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Location</h4>
+                    <p className="text-gray-300">Lagos, Nigeria (Remote-friendly)</p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Experience</h4>
+                    <p className="text-gray-300">6+ years in product design</p>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Focus Areas</h4>
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      B2B SaaS • Fintech • Dashboard Design • Enterprise UX • Startup Growth
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Recent Impact</h4>
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      Helped teams achieve 40-70% improvement in task completion times
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const WorkPage: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }) => {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white pt-24">
+      <div className="max-w-7xl mx-auto px-6 py-20">
+        <div className="text-center mb-24">
+          <h1 className="text-5xl lg:text-7xl font-bold mb-8 tracking-tight">Selected Work</h1>
+          <div className="h-px w-24 bg-gradient-to-r from-orange-400 to-transparent mx-auto mb-8"></div>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+            Case studies showcasing how thoughtful design drives user adoption 
+            and delivers measurable business results.
+          </p>
+        </div>
+
+        <div className="space-y-32">
+          {Object.entries(caseStudies).map(([key, study], index) => (
+            <div key={key} className="group">
+              <div className={`grid lg:grid-cols-2 gap-16 items-center ${
+                index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
+              }`}>
+                <div className={`space-y-8 ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-4">
+                      <span className="text-orange-400 text-sm font-bold uppercase tracking-widest">{study.year}</span>
+                      <div className="h-px flex-1 bg-gradient-to-r from-orange-400/50 to-transparent"></div>
+                    </div>
+                    <h2 className="text-4xl lg:text-6xl font-bold tracking-tight group-hover:text-orange-400 transition-colors duration-300">
+                      {study.title}
+                    </h2>
+                    <p className="text-2xl text-gray-400 font-light">{study.subtitle}</p>
+                  </div>
+                  
+                  <p className="text-lg text-gray-300 leading-relaxed">{study.description}</p>
+                  
+                  <div className="flex flex-wrap gap-3">
+                    {study.tags.map((tag, tagIndex) => (
+                      <span
+                        key={tagIndex}
+                        className="px-4 py-2 bg-gray-900 text-sm rounded-full text-gray-300 border border-gray-800/50 hover:border-orange-500/30 transition-colors duration-300"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => onNavigate(`case-${key}` as Page)}
+                    className="group/btn inline-flex items-center space-x-3 text-orange-400 hover:text-orange-300 transition-all duration-300 font-medium text-lg"
+                  >
+                    <span>View Case Study</span>
+                    <ChevronRight size={20} className="group-hover/btn:translate-x-2 transition-transform duration-200" />
+                  </button>
+                </div>
+
+                <div className={`relative ${index % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}`}>
+                  <div className="relative group/image cursor-pointer" onClick={() => onNavigate(`case-${key}` as Page)}>
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent rounded-3xl blur-3xl group-hover/image:blur-2xl transition-all duration-700"></div>
+                    <div className="relative aspect-[4/3] bg-gradient-to-br from-orange-500/10 via-gray-900 to-gray-950 rounded-3xl flex items-center justify-center border border-gray-800/50 group-hover/image:border-orange-500/30 transition-all duration-500 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                      <span className="relative text-5xl font-bold text-orange-400 group-hover/image:scale-110 transition-transform duration-500">
+                        {study.title}
+                      </span>
+                      <div className="absolute top-6 right-6 opacity-0 group-hover/image:opacity-100 transition-all duration-300">
+                        <ArrowUpRight size={28} className="text-orange-400" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA Section */}
+        <div className="text-center pt-32 space-y-8">
+          <h2 className="text-4xl font-bold tracking-tight">
+            Let's build something great together
+          </h2>
+          <button
+            onClick={() => onNavigate('contact')}
+            className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-medium hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 inline-flex items-center space-x-3"
+          >
+            <Mail size={20} />
+            <span>Contact Me</span>
+            <ArrowUpRight size={20} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ContactPage: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white pt-24">
+      <div className="max-w-4xl mx-auto px-6 py-20">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl lg:text-7xl font-bold mb-8 tracking-tight">Let's Connect</h1>
+          <div className="h-px w-24 bg-gradient-to-r from-orange-400 to-transparent mx-auto mb-8"></div>
+          <p className="text-xl text-gray-300 leading-relaxed font-light max-w-2xl mx-auto">
+            I'm always interested in discussing new opportunities, challenging projects, 
+            and ways we can create meaningful impact together.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-16">
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-2xl font-bold mb-6">Get in Touch</h2>
+              <div className="space-y-6">
+                <a
+                  href="mailto:bola@example.com"
+                  className="group flex items-center space-x-4 p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl border border-gray-700/50 hover:border-orange-500/30 transition-all duration-300"
+                >
+                  <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center group-hover:bg-orange-500/30 transition-colors duration-300">
+                    <Mail size={24} className="text-orange-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white">Email</p>
+                    <p className="text-gray-400 group-hover:text-gray-300 transition-colors">bola@example.com</p>
+                  </div>
+                  <ArrowUpRight size={20} className="text-orange-400 ml-auto group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                </a>
+
+                <a
+                  href="https://linkedin.com/in/bola-olaniyan"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center space-x-4 p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl border border-gray-700/50 hover:border-orange-500/30 transition-all duration-300"
+                >
+                  <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center group-hover:bg-orange-500/30 transition-colors duration-300">
+                    <Linkedin size={24} className="text-orange-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white">LinkedIn</p>
+                    <p className="text-gray-400 group-hover:text-gray-300 transition-colors">Connect professionally</p>
+                  </div>
+                  <ArrowUpRight size={20} className="text-orange-400 ml-auto group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                </a>
+
+                <a
+                  href="https://calendly.com/bola-olaniyan"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center space-x-4 p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl border border-gray-700/50 hover:border-orange-500/30 transition-all duration-300"
+                >
+                  <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center group-hover:bg-orange-500/30 transition-colors duration-300">
+                    <Calendar size={24} className="text-orange-400" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-white">Schedule a Call</p>
+                    <p className="text-gray-400 group-hover:text-gray-300 transition-colors">Book a 30-minute chat</p>
+                  </div>
+                  <ArrowUpRight size={20} className="text-orange-400 ml-auto group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                </a>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-bold mb-4">What I'm Looking For</h3>
+              <ul className="space-y-3 text-gray-300">
+                <li className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <span>Product design roles at growing startups and scale-ups</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <span>Consulting opportunities for complex B2B workflows</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <span>Collaborative projects with cross-functional teams</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <span>Mentoring and speaking opportunities</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="space-y-8">
+            <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-8 border border-gray-700/50">
+              <h3 className="text-xl font-bold mb-6">Quick Facts</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-orange-400 text-sm font-medium uppercase tracking-wider mb-1">Location</p>
+                  <p className="text-gray-300">Lagos, Nigeria (Remote-friendly)</p>
+                </div>
+                <div>
+                  <p className="text-orange-400 text-sm font-medium uppercase tracking-wider mb-1">Availability</p>
+                  <p className="text-gray-300">Open to new opportunities</p>
+                </div>
+                <div>
+                  <p className="text-orange-400 text-sm font-medium uppercase tracking-wider mb-1">Response Time</p>
+                  <p className="text-gray-300">Usually within 24 hours</p>
+                </div>
+                <div>
+                  <p className="text-orange-400 text-sm font-medium uppercase tracking-wider mb-1">Time Zone</p>
+                  <p className="text-gray-300">WAT (UTC+1)</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-orange-500/10 via-gray-900 to-gray-950 rounded-3xl p-8 border border-orange-500/20">
+              <h3 className="text-xl font-bold mb-4 text-orange-400">Let's Build Something Great</h3>
+              <p className="text-gray-300 leading-relaxed mb-6">
+                Whether you're looking to improve user experience, streamline complex workflows, 
+                or scale your design system, I'd love to hear about your challenges and explore 
+                how we can work together.
+              </p>
+              <div className="flex items-center space-x-3 text-green-400">
+                <div className="relative">
+                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                  <div className="absolute inset-0 w-3 h-3 bg-green-400 rounded-full animate-ping opacity-20"></div>
+                </div>
+                <span className="text-sm font-medium">Available for new projects</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CaseStudyPage: React.FC<{
+  caseKey: string;
+  onNavigate: (page: Page) => void;
+}> = ({ caseKey, onNavigate }) => {
+  const study = caseStudies[caseKey as keyof typeof caseStudies];
+
+  if (!study) return null;
+
+  const sections = [
+    { title: 'Challenge', content: study.challenge, key: 'challenge' },
+    { title: 'Process', content: study.process, key: 'process' },
+    { title: 'Solution', content: study.solution, key: 'solution' },
+    { title: 'Impact', content: study.impact, key: 'impact' },
+    { title: 'Reflection', content: study.reflection, key: 'reflection' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white pt-24">
+      {/* Hero Section */}
+      <div className="max-w-5xl mx-auto px-6 py-20">
+        <button
+          onClick={() => onNavigate('work')}
+          className="group inline-flex items-center space-x-3 text-gray-400 hover:text-orange-400 transition-all duration-300 mb-12 text-lg"
+        >
+          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform duration-200" />
+          <span>Back to Work</span>
+        </button>
+
+        <div className="space-y-12 mb-20">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <span className="text-orange-400 text-sm font-bold uppercase tracking-widest">{study.year}</span>
+              <h1 className="text-6xl lg:text-8xl font-bold leading-none tracking-tight">
+                {study.title}
+              </h1>
+              <p className="text-3xl text-gray-400 font-light">{study.subtitle}</p>
+            </div>
+            
+            <div className="h-px w-32 bg-gradient-to-r from-orange-400 to-transparent"></div>
+            
+            <p className="text-2xl text-gray-300 leading-relaxed max-w-4xl font-light">
+              {study.description}
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap gap-3">
+            {study.tags.map((tag, index) => (
+              <span
+                key={index}
+                className="px-5 py-2 bg-gray-900 text-sm rounded-full text-gray-300 border border-gray-800/50 font-medium"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Project Details */}
+        <div className="grid md:grid-cols-4 gap-8 mb-20 p-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl border border-gray-700/50">
+          <div>
+            <h4 className="font-bold text-orange-400 mb-3 text-sm uppercase tracking-wider">Role</h4>
+            <p className="text-gray-300 font-medium">{study.role}</p>
+          </div>
+          <div>
+            <h4 className="font-bold text-orange-400 mb-3 text-sm uppercase tracking-wider">Timeline</h4>
+            <p className="text-gray-300 font-medium">{study.timeline}</p>
+          </div>
+          <div>
+            <h4 className="font-bold text-orange-400 mb-3 text-sm uppercase tracking-wider">Client</h4>
+            <p className="text-gray-300 font-medium">{study.client}</p>
+          </div>
+          <div>
+            <h4 className="font-bold text-orange-400 mb-3 text-sm uppercase tracking-wider">Year</h4>
+            <p className="text-gray-300 font-medium">{study.year}</p>
+          </div>
+        </div>
+
+        {/* Hero Visual */}
+        <div className="relative mb-24">
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent rounded-3xl blur-3xl"></div>
+          <div className="relative aspect-video bg-gradient-to-br from-orange-500/10 via-gray-900 to-gray-950 rounded-3xl flex items-center justify-center border border-gray-700/50">
+            <span className="text-5xl font-bold text-orange-400">{study.title}</span>
           </div>
         </div>
       </div>
 
-      {/* Accessibility Toggle Button */}
-      <button
-        onClick={() => setShowAccessibility(!showAccessibility)}
-        className="fixed top-4 right-4 z-40 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
-        aria-label="Open accessibility options"
-      >
-        <Settings className="w-5 h-5" />
-      </button>
-
-      {/* Calendly Button - Always Visible */}
-      <a
-        href="https://calendly.com/hello-workwithbola/30min"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-40 bg-green-600 text-white px-4 py-3 rounded-full shadow-lg hover:bg-green-700 transition-all duration-300 flex items-center space-x-2 group"
-      >
-        <Calendar className="w-5 h-5" />
-        <span className="hidden group-hover:inline-block transition-all duration-300">Book a Call</span>
-      </a>
-
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 z-30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="font-bold text-xl text-gray-900">Bola Olaniyan</div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {['Home', 'About', 'Work', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className={`text-sm font-medium transition-colors ${
-                    activeSection === item.toLowerCase()
-                      ? 'text-blue-600'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-              <a
-                href="https://drive.google.com/file/d/1u-wFuPM3l1VTjYyKcIRaPsr1QEhn5nFT/view?usp=drive_link"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-1 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                <Download className="w-4 h-4" />
-                <span>Resume</span>
-              </a>
+      {/* Case Study Sections */}
+      <div className="max-w-4xl mx-auto px-6 space-y-24 pb-24">
+        {sections.map((section, index) => (
+          <div key={section.key} className="space-y-8">
+            <div className="space-y-4">
+              <h2 className="text-4xl font-bold text-orange-400 tracking-tight">{section.title}</h2>
+              <div className="h-px w-16 bg-gradient-to-r from-orange-400 to-transparent"></div>
             </div>
+            <div className="prose prose-lg prose-invert max-w-none">
+              {section.key === 'impact' ? (
+                <div className="space-y-4">
+                  {section.content.split('\n').map((line, lineIndex) => (
+                    line.trim() && (
+                      <p key={lineIndex} className="text-lg text-gray-300 leading-relaxed font-light flex items-start space-x-3">
+                        {line.startsWith('•') ? (
+                          <>
+                            <span className="text-orange-400 font-bold mt-1">•</span>
+                            <span>{line.substring(1).trim()}</span>
+                          </>
+                        ) : (
+                          <span>{line}</span>
+                        )}
+                      </p>
+                    )
+                  ))}
+                </div>
+              ) : (
+                <p className="text-lg text-gray-300 leading-relaxed font-light">{section.content}</p>
+              )}
+            </div>
+            {index < sections.length - 1 && (
+              <div className="pt-12">
+                <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"></div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
 
-            {/* Mobile menu button */}
+      {/* CTA Section */}
+      <div className="max-w-4xl mx-auto px-6 py-24">
+        <div className="text-center space-y-8">
+          <h3 className="text-4xl font-bold tracking-tight">Let's build something great together</h3>
+          <p className="text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
+            Interested in working together or discussing this project in more detail?
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-6">
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2"
+              onClick={() => onNavigate('contact')}
+              className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-medium hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 inline-flex items-center justify-center space-x-3"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              <Mail size={20} />
+              <span>Contact Me</span>
+              <ArrowUpRight size={20} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+            </button>
+            <button
+              onClick={() => onNavigate('work')}
+              className="group border border-gray-600 text-gray-300 px-8 py-4 rounded-full font-medium hover:border-orange-400 hover:text-orange-400 transition-all duration-300 inline-flex items-center justify-center space-x-3"
+            >
+              <span>View More Work</span>
+              <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform duration-200" />
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100">
-            <div className="px-4 py-2 space-y-1">
-              {['Home', 'About', 'Work', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
-                >
-                  {item}
-                </button>
-              ))}
-              <a
-                href="https://drive.google.com/file/d/1u-wFuPM3l1VTjYyKcIRaPsr1QEhn5nFT/view?usp=drive_link"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 w-full text-left px-3 py-2 text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
-              >
-                <Download className="w-4 h-4" />
-                <span>Resume</span>
-              </a>
-            </div>
-          </div>
-        )}
-      </nav>
+function App() {
+  const [currentPage, setCurrentPage] = useState<Page>('home');
 
-      {/* Hero Section */}
-      <section id="home" className="pt-16 min-h-screen flex items-center">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                Product Designer Focused on{' '}
-                <span className="text-blue-600">User Impact</span> &{' '}
-                <span className="text-green-600">Business Outcomes</span>
-              </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                I help startups design digital products that solve real problems, drive user adoption, 
-                and deliver measurable business results. 6+ years of turning complex challenges into 
-                intuitive experiences.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => scrollToSection('work')}
-                  className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
-                >
-                  <span>View My Work</span>
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => scrollToSection('contact')}
-                  className="border border-gray-300 text-gray-700 px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-                >
-                  Get In Touch
-                </button>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-blue-100 to-green-100 rounded-2xl flex items-center justify-center">
-                <div className="text-6xl">👋</div>
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-white p-4 rounded-lg shadow-lg">
-                <div className="text-sm text-gray-600">Available for projects</div>
-                <div className="w-3 h-3 bg-green-500 rounded-full inline-block mr-2"></div>
-                <span className="text-sm font-medium">Open to opportunities</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+  const handleNavigation = (page: Page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-      {/* About Section */}
-      <section id="about" className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              About Me
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              I believe great design happens when user needs align with business goals. 
-              My approach combines data-driven insights with human-centered design principles.
-            </p>
-          </div>
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return <HomePage onNavigate={handleNavigation} />;
+      case 'about':
+        return <AboutPage onNavigate={handleNavigation} />;
+      case 'work':
+        return <WorkPage onNavigate={handleNavigation} />;
+      case 'contact':
+        return <ContactPage />;
+      case 'case-auditbar':
+        return <CaseStudyPage caseKey="auditbar" onNavigate={handleNavigation} />;
+      case 'case-paysure':
+        return <CaseStudyPage caseKey="paysure" onNavigate={handleNavigation} />;
+      case 'case-summarizer':
+        return <CaseStudyPage caseKey="summarizer" onNavigate={handleNavigation} />;
+      default:
+        return <HomePage onNavigate={handleNavigation} />;
+    }
+  };
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">My Design Philosophy</h3>
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Eye className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">User-Centered Approach</h4>
-                    <p className="text-gray-600">Every design decision starts with understanding user needs, pain points, and behaviors through research and testing.</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <ArrowRight className="w-4 h-4 text-green-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Business Impact Focus</h4>
-                    <p className="text-gray-600">I measure success through metrics that matter - user adoption, retention, conversion rates, and revenue growth.</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Settings className="w-4 h-4 text-purple-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Iterative Process</h4>
-                    <p className="text-gray-600">Continuous testing, learning, and refinement to ensure designs evolve with user needs and business requirements.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Experience & Skills</h3>
-              <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-900">Product Design</span>
-                    <span className="text-sm text-gray-600">6+ years</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: '95%' }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-900">UX Research</span>
-                    <span className="text-sm text-gray-600">5+ years</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-green-600 h-2 rounded-full" style={{ width: '90%' }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-900">Prototyping</span>
-                    <span className="text-sm text-gray-600">6+ years</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-purple-600 h-2 rounded-full" style={{ width: '88%' }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-900">Design Systems</span>
-                    <span className="text-sm text-gray-600">4+ years</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-orange-600 h-2 rounded-full" style={{ width: '85%' }}></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Work Section */}
-      <section id="work" className="py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Featured Work
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              A selection of projects that showcase my approach to solving complex design challenges 
-              and delivering measurable business results.
-            </p>
-          </div>
-
-          {/* Product Design Projects */}
-          <div className="mb-20">
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">Product Design Projects</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project, index) => (
-                <div key={index} className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                  <div className="aspect-video bg-gray-100 overflow-hidden">
-                    <img 
-                      src={project.image} 
-                      alt={project.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{project.title}</h3>
-                    <p className="text-gray-600 mb-4 leading-relaxed">{project.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tags.map((tag, tagIndex) => (
-                        <span key={tagIndex} className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-green-600">{project.impact}</span>
-                      <button className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center space-x-1">
-                        <span>View Case Study</span>
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Websites Section */}
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">Websites I've Built</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {websites.map((website, index) => (
-                <div key={index} className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                  <div className="aspect-video bg-gray-100 overflow-hidden">
-                    <img 
-                      src={website.image} 
-                      alt={website.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{website.title}</h3>
-                    <p className="text-gray-600 mb-4 leading-relaxed">{website.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {website.tags.map((tag, tagIndex) => (
-                        <span key={tagIndex} className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <a
-                      href={website.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-700 font-medium text-sm"
-                    >
-                      <span>Visit Website</span>
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Let's Work Together
-          </h2>
-          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-            Ready to create something amazing? I'm always excited to discuss new projects 
-            and opportunities to make a meaningful impact through design.
-          </p>
-          
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            <a
-              href="mailto:hello@bolaolaniyan.com"
-              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow flex items-center space-x-4"
-            >
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Mail className="w-6 h-6 text-blue-600" />
-              </div>
-              <div className="text-left">
-                <div className="font-semibold text-gray-900">Email</div>
-                <div className="text-gray-600">hello@bolaolaniyan.com</div>
-              </div>
-            </a>
-            
-            <a
-              href="https://linkedin.com/in/bolaolaniyan"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow flex items-center space-x-4"
-            >
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <Linkedin className="w-6 h-6 text-blue-600" />
-              </div>
-              <div className="text-left">
-                <div className="font-semibold text-gray-900">LinkedIn</div>
-                <div className="text-gray-600">Connect with me</div>
-              </div>
-            </a>
-            
-            <a
-              href="https://calendly.com/hello-workwithbola/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow flex items-center space-x-4"
-            >
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-green-600" />
-              </div>
-              <div className="text-left">
-                <div className="font-semibold text-gray-900">Schedule Call</div>
-                <div className="text-gray-600">Book 30min chat</div>
-              </div>
-            </a>
-          </div>
-
-          <div className="bg-white p-8 rounded-2xl shadow-sm">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Ready to Start a Project?</h3>
-            <p className="text-gray-600 mb-8">
-              Whether you're a startup looking to validate your product idea or an established company 
-              ready to redesign your user experience, I'd love to hear about your challenges and goals.
-            </p>
-            <a
-              href="https://calendly.com/hello-workwithbola/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center space-x-2 bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-            >
-              <Calendar className="w-5 h-5" />
-              <span>Schedule a Discovery Call</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <div className="font-bold text-xl mb-2">Bola Olaniyan</div>
-              <div className="text-gray-400">Product Designer focused on impact</div>
-            </div>
-            <div className="flex space-x-6">
-              <a href="mailto:hello@bolaolaniyan.com" className="text-gray-400 hover:text-white transition-colors">
-                <Mail className="w-6 h-6" />
-              </a>
-              <a href="https://linkedin.com/in/bolaolaniyan" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                <Linkedin className="w-6 h-6" />
-              </a>
-              <a href="https://twitter.com/bolaolaniyan" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter className="w-6 h-6" />
-              </a>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Bola Olaniyan. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+  return (
+    <div className="bg-black min-h-screen">
+      <NavigationBar currentPage={currentPage} onNavigate={handleNavigation} />
+      <main className="transition-all duration-500 ease-out">
+        {renderCurrentPage()}
+      </main>
     </div>
   );
 }
