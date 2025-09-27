@@ -101,12 +101,12 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-gray-900 text-white">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 z-40">
+      <nav className="fixed top-0 left-0 right-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 z-40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="font-bold text-xl text-gray-900">Bola Olaniyan</div>
+            <div className="font-bold text-xl text-white">Bola Olaniyan</div>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-8">
@@ -116,8 +116,8 @@ function App() {
                   onClick={() => scrollToSection(section)}
                   className={`capitalize transition-colors ${
                     activeSection === section
-                      ? 'text-blue-600 font-medium'
-                      : 'text-gray-600 hover:text-gray-900'
+                      ? 'text-blue-400 font-medium'
+                      : 'text-gray-300 hover:text-white'
                   }`}
                 >
                   {section}
@@ -127,7 +127,7 @@ function App() {
                 href="https://drive.google.com/file/d/1u-wFuPM3l1VTjYyKcIRaPsr1QEhn5nFT/view?usp=drive_link"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors"
+                className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors"
               >
                 <Download size={16} />
                 <span>Resume</span>
@@ -137,7 +137,7 @@ function App() {
             {/* Accessibility Button */}
             <button
               onClick={() => setIsAccessibilityOpen(!isAccessibilityOpen)}
-              className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors"
+              className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-blue-400 hover:bg-gray-700 transition-colors"
               title="Accessibility Settings"
             >
               <Settings size={20} />
@@ -155,13 +155,13 @@ function App() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200">
+          <div className="md:hidden bg-gray-900 border-t border-gray-700">
             <div className="px-4 py-2 space-y-2">
               {['home', 'about', 'work', 'contact'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className="block w-full text-left py-2 capitalize text-gray-600 hover:text-gray-900"
+                  className="block w-full text-left py-2 capitalize text-gray-300 hover:text-white"
                 >
                   {section}
                 </button>
@@ -170,14 +170,14 @@ function App() {
                 href="https://drive.google.com/file/d/1u-wFuPM3l1VTjYyKcIRaPsr1QEhn5nFT/view?usp=drive_link"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-2 py-2 text-gray-600 hover:text-gray-900"
+                className="flex items-center space-x-2 py-2 text-gray-300 hover:text-white"
               >
                 <Download size={16} />
                 <span>Resume</span>
               </a>
               <button
                 onClick={() => setIsAccessibilityOpen(!isAccessibilityOpen)}
-                className="flex items-center space-x-2 py-2 text-gray-600 hover:text-gray-900"
+                className="flex items-center space-x-2 py-2 text-gray-300 hover:text-white"
               >
                 <Settings size={16} />
                 <span>Accessibility</span>
@@ -189,15 +189,15 @@ function App() {
 
       {/* Accessibility Panel */}
       {isAccessibilityOpen && (
-        <div className="fixed top-16 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 w-80">
+        <div className="fixed top-16 right-4 bg-gray-800 border border-gray-600 rounded-lg shadow-lg p-4 z-50 w-80">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-lg flex items-center">
+            <h3 className="font-semibold text-lg flex items-center text-white">
               <Eye className="mr-2" size={20} />
               Make it easier to read
             </h3>
             <button
               onClick={() => setIsAccessibilityOpen(false)}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-gray-400 hover:text-gray-200"
             >
               <X size={20} />
             </button>
@@ -206,22 +206,23 @@ function App() {
           <div className="space-y-4">
             {/* Font Size */}
             <div>
-              <label className="block text-sm font-medium mb-2 flex items-center">
+              <label className="block text-sm font-medium mb-2 flex items-center text-gray-200">
                 <Type className="mr-2" size={16} />
                 Text Size
               </label>
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setFontSize(Math.max(12, fontSize - 2))}
-                  className="p-2 bg-gray-100 rounded hover:bg-gray-200"
+                  className="p-2 bg-gray-700 rounded hover:bg-gray-600 text-white"
                   title="Make text smaller"
                 >
                   <Minus size={16} />
                 </button>
                 <span className="text-sm px-3 py-1 bg-gray-50 rounded">{fontSize}px</span>
+                <span className="text-sm px-3 py-1 bg-gray-700 rounded text-white">{fontSize}px</span>
                 <button
                   onClick={() => setFontSize(Math.min(24, fontSize + 2))}
-                  className="p-2 bg-gray-100 rounded hover:bg-gray-200"
+                  className="p-2 bg-gray-700 rounded hover:bg-gray-600 text-white"
                   title="Make text bigger"
                 >
                   <Plus size={16} />
@@ -231,12 +232,12 @@ function App() {
 
             {/* Dyslexia Font */}
             <div>
-              <label className="flex items-center space-x-2">
+              <label className="flex items-center space-x-2 text-gray-200">
                 <input
                   type="checkbox"
                   checked={isDyslexiaFont}
                   onChange={(e) => setIsDyslexiaFont(e.target.checked)}
-                  className="rounded"
+                  className="rounded bg-gray-700 border-gray-600"
                 />
                 <span className="text-sm">Easy-to-read font for dyslexia</span>
               </label>
@@ -244,12 +245,12 @@ function App() {
 
             {/* High Contrast */}
             <div>
-              <label className="flex items-center space-x-2">
+              <label className="flex items-center space-x-2 text-gray-200">
                 <input
                   type="checkbox"
                   checked={isHighContrast}
                   onChange={(e) => setIsHighContrast(e.target.checked)}
-                  className="rounded"
+                  className="rounded bg-gray-700 border-gray-600"
                 />
                 <span className="text-sm">High contrast colors</span>
               </label>
@@ -257,14 +258,14 @@ function App() {
 
             {/* Color Blind Support */}
             <div>
-              <label className="block text-sm font-medium mb-2 flex items-center">
+              <label className="block text-sm font-medium mb-2 flex items-center text-gray-200">
                 <Palette className="mr-2" size={16} />
                 Color Vision Help
               </label>
               <select
                 value={colorBlindMode}
                 onChange={(e) => setColorBlindMode(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded text-sm"
+                className="w-full p-2 border border-gray-600 rounded text-sm bg-gray-700 text-white"
               >
                 <option value="none">Normal colors</option>
                 <option value="protanopia">Red-blind friendly</option>
@@ -276,7 +277,7 @@ function App() {
             {/* Reset Button */}
             <button
               onClick={resetAccessibility}
-              className="w-full flex items-center justify-center space-x-2 p-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+              className="w-full flex items-center justify-center space-x-2 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
             >
               <RotateCcw size={16} />
               <span>Reset to normal</span>
@@ -290,11 +291,11 @@ function App() {
         href="https://calendly.com/hello-workwithbola/30min"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 z-40 group hover:pr-6"
+        className="fixed bottom-6 right-6 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300 z-40 group hover:pr-6"
         title="Book a call with me"
       >
         <Calendar size={24} />
-        <span className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+        <span className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
           Book a Call
         </span>
       </a>
@@ -303,12 +304,12 @@ function App() {
       <section id="home" className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
               Product Designer Focused on{' '}
-              <span className="text-blue-600">User Impact</span> &{' '}
-              <span className="text-blue-600">Business Outcomes</span>
+              <span className="text-blue-400">User Impact</span> &{' '}
+              <span className="text-blue-400">Business Outcomes</span>
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
               I help startups design digital products that solve real problems, drive user adoption, 
               and deliver measurable business results. 6+ years of turning complex challenges into 
               intuitive experiences.
@@ -316,7 +317,7 @@ function App() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => scrollToSection('work')}
-                className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                className="bg-blue-500 text-white px-8 py-3 rounded-lg hover:bg-blue-600 transition-colors"
               >
                 View My Work
               </button>
@@ -324,7 +325,7 @@ function App() {
                 href="https://calendly.com/hello-workwithbola/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
+                className="border border-gray-600 text-gray-300 px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center"
               >
                 <Calendar className="mr-2" size={20} />
                 Let's Talk
@@ -335,20 +336,20 @@ function App() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 bg-gray-50 px-4 sm:px-6 lg:px-8">
+      <section id="about" className="py-16 bg-gray-800 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl font-bold text-white mb-6">
                 Designing with Purpose, Measuring Success
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-300 mb-6">
                 I'm a product designer who believes great design isn't just about how it looks—it's about 
                 how it performs. With 6+ years of experience working with startups and scale-ups, I've 
                 learned that the best designs are those that solve real user problems while driving 
                 business growth.
               </p>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-300 mb-6">
                 My approach combines user research, data analysis, and iterative design to create 
                 products that users love and businesses can measure. I've helped companies increase 
                 conversion rates by up to 40%, reduce support tickets by 60%, and improve user 
@@ -356,8 +357,8 @@ function App() {
               </p>
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Specialties</h3>
-                  <ul className="text-gray-600 space-y-1">
+                  <h3 className="font-semibold text-white mb-2">Specialties</h3>
+                  <ul className="text-gray-300 space-y-1">
                     <li>• B2B SaaS Design</li>
                     <li>• Fintech & Banking</li>
                     <li>• Dashboard Design</li>
@@ -365,8 +366,8 @@ function App() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Skills</h3>
-                  <ul className="text-gray-600 space-y-1">
+                  <h3 className="font-semibold text-white mb-2">Skills</h3>
+                  <ul className="text-gray-300 space-y-1">
                     <li>• User Research</li>
                     <li>• Prototyping</li>
                     <li>• Design Systems</li>
@@ -390,43 +391,44 @@ function App() {
       <section id="work" className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-white mb-4">
               Featured Work
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-300 max-w-2xl mx-auto">
               Here are some of the projects I've worked on that delivered real impact for users and businesses.
             </p>
           </div>
 
           {/* Product Design Projects */}
           <div className="mb-16">
-            <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
-              <div className="w-4 h-4 bg-blue-600 rounded-full mr-3"></div>
+            <h3 className="text-2xl font-bold text-white mb-8 flex items-center">
+              <div className="w-4 h-4 bg-blue-400 rounded-full mr-3"></div>
               Product Design Projects
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((project, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div key={index} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                   <img
                     src={project.image}
                     alt={project.title}
                     className="w-full h-48 object-cover"
                   />
                   <div className="p-6">
-                    <h3 className="font-bold text-xl text-gray-900 mb-3">{project.title}</h3>
-                    <p className="text-gray-600 mb-4">{project.description}</p>
+                    <h3 className="font-bold text-xl text-white mb-3">{project.title}</h3>
+                    <p className="text-gray-300 mb-4">{project.description}</p>
                     <div className="mb-4">
                       <div className="flex flex-wrap gap-2 mb-3">
                         {project.tags.map((tag, tagIndex) => (
                           <span
                             key={tagIndex}
-                            className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                            className="px-3 py-1 bg-blue-900 text-blue-200 text-sm rounded-full"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
                       <p className="text-sm font-medium text-green-600">{project.metrics}</p>
+                      <p className="text-sm font-medium text-green-400">{project.metrics}</p>
                     </div>
                   </div>
                 </div>
@@ -436,39 +438,40 @@ function App() {
 
           {/* Websites Section */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center">
-              <div className="w-4 h-4 bg-green-600 rounded-full mr-3"></div>
+            <h3 className="text-2xl font-bold text-white mb-8 flex items-center">
+              <div className="w-4 h-4 bg-green-400 rounded-full mr-3"></div>
               Websites I've Built
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {websites.map((website, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div key={index} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                   <img
                     src={website.image}
                     alt={website.title}
                     className="w-full h-48 object-cover"
                   />
                   <div className="p-6">
-                    <h3 className="font-bold text-xl text-gray-900 mb-3">{website.title}</h3>
-                    <p className="text-gray-600 mb-4">{website.description}</p>
+                    <h3 className="font-bold text-xl text-white mb-3">{website.title}</h3>
+                    <p className="text-gray-300 mb-4">{website.description}</p>
                     <div className="mb-4">
                       <div className="flex flex-wrap gap-2 mb-3">
                         {website.tags.map((tag, tagIndex) => (
                           <span
                             key={tagIndex}
-                            className="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full"
+                            className="px-3 py-1 bg-green-900 text-green-200 text-sm rounded-full"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
                       <p className="text-sm font-medium text-blue-600 mb-3">{website.metrics}</p>
+                      <p className="text-sm font-medium text-blue-400 mb-3">{website.metrics}</p>
                     </div>
                     <a
                       href={website.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center text-green-600 hover:text-green-700 font-medium"
+                      className="inline-flex items-center text-green-400 hover:text-green-300 font-medium"
                     >
                       Visit Website
                       <ExternalLink className="ml-1" size={16} />
@@ -482,12 +485,12 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 bg-gray-50 px-4 sm:px-6 lg:px-8">
+      <section id="contact" className="py-16 bg-gray-800 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl font-bold text-white mb-6">
             Let's Work Together
           </h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
             Ready to create something amazing? I'm always excited to work on projects that make a real 
             difference. Let's discuss how we can bring your vision to life.
           </p>
@@ -496,14 +499,14 @@ function App() {
               href="https://calendly.com/hello-workwithbola/30min"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+              className="bg-blue-500 text-white px-8 py-3 rounded-lg hover:bg-blue-600 transition-colors flex items-center justify-center"
             >
               <Calendar className="mr-2" size={20} />
               Schedule a Call
             </a>
             <a
               href="mailto:hello@workwithbola.com"
-              className="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+              className="border border-gray-600 text-gray-300 px-8 py-3 rounded-lg hover:bg-gray-700 transition-colors"
             >
               Send an Email
             </a>
@@ -512,9 +515,9 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-8 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gray-900 border-t border-gray-700 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto text-center">
-          <p className="text-gray-600">
+          <p className="text-gray-400">
             © 2024 Bola Olaniyan. Designed and built with care.
           </p>
         </div>
