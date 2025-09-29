@@ -122,6 +122,16 @@ const NavigationBar: React.FC<{
               currentPage === 'contact' ? 'w-full' : 'w-0 group-hover:w-full'
             }`}></span>
           </button>
+          {/* Resume link - update URL here if needed */}
+          <a 
+            href="https://drive.google.com/file/d/1u-wFuPM3l1VTjYyKcIRaPsr1QEhn5nFT/view?usp=sharing" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="relative text-sm font-medium transition-all duration-300 tracking-wide text-gray-300 hover:text-white group"
+          >
+            Resume
+            <span className="absolute -bottom-1 left-0 h-px bg-orange-400 transition-all duration-300 w-0 group-hover:w-full"></span>
+          </a>
           <button
             onClick={() => onNavigate('contact')}
             className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 flex items-center space-x-2"
