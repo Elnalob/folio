@@ -619,29 +619,41 @@ const ContactPage: React.FC = () => {
           <div className="space-y-8">
             <div>
               <h2 className="text-2xl font-bold mb-6">Get in Touch</h2>
+            {/* Left Column - Hero Text Content */}
               <div className="space-y-6">
+              {/* Main Headline - Edit the main title here */}
                 <a
                   href="mailto:bola@example.com"
                   className="group flex items-center space-x-4 p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl border border-gray-700/50 hover:border-orange-500/30 transition-all duration-300"
                 >
+              
+              {/* Hero Description - Edit the main description here */}
                   <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center group-hover:bg-orange-500/30 transition-colors duration-300">
                     <Mail size={24} className="text-orange-400" />
                   </div>
                   <div>
-                    <p className="font-medium text-white">Email</p>
+              
+              {/* Hero CTA Section - Button and Status aligned horizontally */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-4 sm:space-y-0">
+                {/* Primary CTA Button - Edit button text and link here */}
                     <p className="text-gray-400 group-hover:text-gray-300 transition-colors">bola@example.com</p>
                   </div>
-                  <ArrowUpRight size={20} className="text-orange-400 ml-auto group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                  className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium text-center sm:text-left"
                 </a>
 
                 <a
+                
+                {/* Availability Status - Edit availability status here */}
                   href="https://linkedin.com/in/bola-olaniyan"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center space-x-4 p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl border border-gray-700/50 hover:border-orange-500/30 transition-all duration-300"
                 >
                   <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center group-hover:bg-orange-500/30 transition-colors duration-300">
+            
+            {/* Right Column - Hero Image */}
                     <Linkedin size={24} className="text-orange-400" />
+              {/* Hero Image - Replace src URL to change the main hero image */}
                   </div>
                   <div>
                     <p className="font-medium text-white">LinkedIn</p>
@@ -652,18 +664,26 @@ const ContactPage: React.FC = () => {
 
                 <a
                   href="https://calendly.com/bola-olaniyan"
+      {/* ABOUT SECTION */}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center space-x-4 p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl border border-gray-700/50 hover:border-orange-500/30 transition-all duration-300"
+            {/* About Image */}
                 >
+              {/* About Section Image - Replace src URL to change about image */}
                   <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center group-hover:bg-orange-500/30 transition-colors duration-300">
                     <Calendar size={24} className="text-orange-400" />
                   </div>
                   <div>
                     <p className="font-medium text-white">Schedule a Call</p>
                     <p className="text-gray-400 group-hover:text-gray-300 transition-colors">Book a 30-minute chat</p>
+            
+            {/* About Content */}
                   </div>
+              {/* About Section Title - Edit about section title here */}
                   <ArrowUpRight size={20} className="text-orange-400 ml-auto group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+              
+              {/* About Description - Edit about description paragraphs here */}
                 </a>
               </div>
             </div>
@@ -680,6 +700,8 @@ const ContactPage: React.FC = () => {
                   <span>Consulting opportunities for complex B2B workflows</span>
                 </li>
                 <li className="flex items-start space-x-3">
+              
+              {/* Skills List - Add/remove/edit skills here */}
                   <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0"></div>
                   <span>Collaborative projects with cross-functional teams</span>
                 </li>
@@ -698,103 +720,132 @@ const ContactPage: React.FC = () => {
                 <div>
                   <p className="text-orange-400 text-sm font-medium uppercase tracking-wider mb-1">Location</p>
                   <p className="text-gray-300">Lagos, Nigeria (Remote-friendly)</p>
+      {/* WORK/PORTFOLIO SECTION */}
                 </div>
                 <div>
+          {/* Section Header */}
                   <p className="text-orange-400 text-sm font-medium uppercase tracking-wider mb-1">Availability</p>
+            {/* Work Section Title - Edit portfolio section title here */}
                   <p className="text-gray-300">Open to new opportunities</p>
+            {/* Work Section Subtitle - Edit portfolio section subtitle here */}
                 </div>
                 <div>
                   <p className="text-orange-400 text-sm font-medium uppercase tracking-wider mb-1">Response Time</p>
                   <p className="text-gray-300">Usually within 24 hours</p>
                 </div>
                 <div>
+          {/* Projects Grid - Add/remove/edit projects here */}
                   <p className="text-orange-400 text-sm font-medium uppercase tracking-wider mb-1">Time Zone</p>
+            {/* PROJECT 1 - E-commerce Dashboard */}
                   <p className="text-gray-300">WAT (UTC+1)</p>
+              {/* Project 1 Image - Replace src URL to change project image */}
                 </div>
               </div>
             </div>
 
             <div className="bg-gradient-to-br from-orange-500/10 via-gray-900 to-gray-950 rounded-3xl p-8 border border-orange-500/20">
               <h3 className="text-xl font-bold mb-4 text-orange-400">Let's Build Something Great</h3>
+                {/* Project 1 Title - Edit project title here */}
               <p className="text-gray-300 leading-relaxed mb-6">
+                {/* Project 1 Description - Edit project description here */}
                 Whether you're looking to improve user experience, streamline complex workflows, 
                 or scale your design system, I'd love to hear about your challenges and explore 
                 how we can work together.
               </p>
+                {/* Project 1 Tags - Edit project technologies/tags here */}
               <div className="flex items-center space-x-3 text-green-400">
                 <div className="relative">
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                   <div className="absolute inset-0 w-3 h-3 bg-green-400 rounded-full animate-ping opacity-20"></div>
                 </div>
+                {/* Project 1 Link - Edit project link here */}
                 <span className="text-sm font-medium">Available for new projects</span>
               </div>
             </div>
           </div>
         </div>
       </div>
+            {/* PROJECT 2 - Mobile Banking App */}
     </div>
+              {/* Project 2 Image - Replace src URL to change project image */}
   );
 };
 
 const CaseStudyPage: React.FC<{
   caseKey: string;
   onNavigate: (page: Page) => void;
+                {/* Project 2 Title - Edit project title here */}
 }> = ({ caseKey, onNavigate }) => {
+                {/* Project 2 Description - Edit project description here */}
   const study = caseStudies[caseKey as keyof typeof caseStudies];
 
   if (!study) return null;
 
+                {/* Project 2 Tags - Edit project technologies/tags here */}
   const sections = [
     { title: 'Challenge', content: study.challenge, key: 'challenge' },
     { title: 'Process', content: study.process, key: 'process' },
     { title: 'Solution', content: study.solution, key: 'solution' },
     { title: 'Impact', content: study.impact, key: 'impact' },
+                {/* Project 2 Link - Edit project link here */}
     { title: 'Reflection', content: study.reflection, key: 'reflection' },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white pt-24">
       {/* Hero Section */}
+            {/* PROJECT 3 - SaaS Platform */}
       <div className="max-w-5xl mx-auto px-6 py-20">
+              {/* Project 3 Image - Replace src URL to change project image */}
         <button
           onClick={() => onNavigate('work')}
           className="group inline-flex items-center space-x-3 text-gray-400 hover:text-orange-400 transition-all duration-300 mb-12 text-lg"
         >
           <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform duration-200" />
           <span>Back to Work</span>
+                {/* Project 3 Title - Edit project title here */}
         </button>
+                {/* Project 3 Description - Edit project description here */}
 
         <div className="space-y-12 mb-20">
           <div className="space-y-8">
             <div className="space-y-4">
+                {/* Project 3 Tags - Edit project technologies/tags here */}
               <span className="text-orange-400 text-sm font-bold uppercase tracking-widest">{study.year}</span>
               <h1 className="text-6xl lg:text-8xl font-bold leading-none tracking-tight">
                 {study.title}
               </h1>
               <p className="text-3xl text-gray-400 font-light">{study.subtitle}</p>
+                {/* Project 3 Link - Edit project link here */}
             </div>
             
             <div className="h-px w-32 bg-gradient-to-r from-orange-400 to-transparent"></div>
             
             <p className="text-2xl text-gray-300 leading-relaxed max-w-4xl font-light">
               {study.description}
+            {/* PROJECT 4 - Additional project slot */}
             </p>
+              {/* Project 4 Image - Replace src URL to change project image */}
           </div>
           
           <div className="flex flex-wrap gap-3">
             {study.tags.map((tag, index) => (
               <span
                 key={index}
+                {/* Project 4 Title - Edit project title here */}
                 className="px-5 py-2 bg-gray-900 text-sm rounded-full text-gray-300 border border-gray-800/50 font-medium"
+                {/* Project 4 Description - Edit project description here */}
               >
                 {tag}
               </span>
             ))}
+                {/* Project 4 Tags - Edit project technologies/tags here */}
           </div>
         </div>
 
         {/* Project Details */}
         <div className="grid md:grid-cols-4 gap-8 mb-20 p-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl border border-gray-700/50">
+                {/* Project 4 Link - Edit project link here */}
           <div>
             <h4 className="font-bold text-orange-400 mb-3 text-sm uppercase tracking-wider">Role</h4>
             <p className="text-gray-300 font-medium">{study.role}</p>
@@ -804,24 +855,33 @@ const CaseStudyPage: React.FC<{
             <p className="text-gray-300 font-medium">{study.timeline}</p>
           </div>
           <div>
+      {/* EXPERIENCE SECTION */}
             <h4 className="font-bold text-orange-400 mb-3 text-sm uppercase tracking-wider">Client</h4>
             <p className="text-gray-300 font-medium">{study.client}</p>
+          {/* Experience Section Header */}
           </div>
+            {/* Experience Section Title - Edit experience section title here */}
           <div>
+            {/* Experience Section Subtitle - Edit experience section subtitle here */}
             <h4 className="font-bold text-orange-400 mb-3 text-sm uppercase tracking-wider">Year</h4>
             <p className="text-gray-300 font-medium">{study.year}</p>
           </div>
         </div>
 
+          {/* Experience Timeline - Add/remove/edit experience entries here */}
         {/* Hero Visual */}
+            {/* EXPERIENCE 1 - Current/Most Recent */}
         <div className="relative mb-24">
           <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent rounded-3xl blur-3xl"></div>
+                {/* Job Title and Company - Edit job details here */}
           <div className="relative aspect-video bg-gradient-to-br from-orange-500/10 via-gray-900 to-gray-950 rounded-3xl flex items-center justify-center border border-gray-700/50">
             <span className="text-5xl font-bold text-orange-400">{study.title}</span>
           </div>
         </div>
+                {/* Employment Period - Edit dates here */}
       </div>
 
+              {/* Job Description - Edit job responsibilities here */}
       {/* Case Study Sections */}
       <div className="max-w-4xl mx-auto px-6 space-y-24 pb-24">
         {sections.map((section, index) => (
@@ -830,14 +890,18 @@ const CaseStudyPage: React.FC<{
               <h2 className="text-4xl font-bold text-orange-400 tracking-tight">{section.title}</h2>
               <div className="h-px w-16 bg-gradient-to-r from-orange-400 to-transparent"></div>
             </div>
+            {/* EXPERIENCE 2 */}
             <div className="prose prose-lg prose-invert max-w-none">
               {section.key === 'impact' ? (
+                {/* Job Title and Company - Edit job details here */}
                 <div className="space-y-4">
                   {section.content.split('\n').map((line, lineIndex) => (
                     line.trim() && (
                       <p key={lineIndex} className="text-lg text-gray-300 leading-relaxed font-light flex items-start space-x-3">
+                {/* Employment Period - Edit dates here */}
                         {line.startsWith('•') ? (
                           <>
+              {/* Job Description - Edit job responsibilities here */}
                             <span className="text-orange-400 font-bold mt-1">•</span>
                             <span>{line.substring(1).trim()}</span>
                           </>
@@ -845,14 +909,18 @@ const CaseStudyPage: React.FC<{
                           <span>{line}</span>
                         )}
                       </p>
+            {/* EXPERIENCE 3 */}
                     )
                   ))}
+                {/* Job Title and Company - Edit job details here */}
                 </div>
               ) : (
                 <p className="text-lg text-gray-300 leading-relaxed font-light">{section.content}</p>
               )}
+                {/* Employment Period - Edit dates here */}
             </div>
             {index < sections.length - 1 && (
+              {/* Job Description - Edit job responsibilities here */}
               <div className="pt-12">
                 <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"></div>
               </div>
@@ -863,15 +931,21 @@ const CaseStudyPage: React.FC<{
 
       {/* CTA Section */}
       <div className="max-w-4xl mx-auto px-6 py-24">
+      {/* CONTACT SECTION */}
         <div className="text-center space-y-8">
           <h3 className="text-4xl font-bold tracking-tight">Let's build something great together</h3>
+          {/* Contact Section Header */}
+          {/* Contact Section Title - Edit contact section title here */}
           <p className="text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
+          {/* Contact Section Description - Edit contact description here */}
             Interested in working together or discussing this project in more detail?
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
             <button
               onClick={() => onNavigate('contact')}
+          {/* Contact Methods Grid - Edit contact information here */}
               className="group bg-gradient-to-r from-orange-500 to-orange-600 text-white px-8 py-4 rounded-full font-medium hover:shadow-xl hover:shadow-orange-500/25 transition-all duration-300 inline-flex items-center justify-center space-x-3"
+            {/* Email Contact - Edit email address here */}
             >
               <Mail size={20} />
               <span>Contact Me</span>
@@ -882,6 +956,7 @@ const CaseStudyPage: React.FC<{
               className="group border border-gray-600 text-gray-300 px-8 py-4 rounded-full font-medium hover:border-orange-400 hover:text-orange-400 transition-all duration-300 inline-flex items-center justify-center space-x-3"
             >
               <span>View More Work</span>
+            {/* Phone Contact - Edit phone number here */}
               <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform duration-200" />
             </button>
           </div>
@@ -891,6 +966,8 @@ const CaseStudyPage: React.FC<{
   );
 };
 
+// Main App Component - Contains the entire portfolio website
+            {/* Location - Edit location here */}
 function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
 
@@ -900,6 +977,7 @@ function App() {
   };
 
   const renderCurrentPage = () => {
+          {/* Primary Contact CTA - Edit main contact button here */}
     switch (currentPage) {
       case 'home':
         return <HomePage onNavigate={handleNavigation} />;
@@ -909,19 +987,34 @@ function App() {
         return <WorkPage onNavigate={handleNavigation} />;
       case 'contact':
         return <ContactPage />;
+      {/* FOOTER */}
       case 'case-auditbar':
         return <CaseStudyPage caseKey="auditbar" onNavigate={handleNavigation} />;
       case 'case-paysure':
+            {/* Footer Logo/Name - Edit footer name here */}
         return <CaseStudyPage caseKey="paysure" onNavigate={handleNavigation} />;
+            {/* Logo/Name - Edit the name here */}
       case 'case-summarizer':
+            
+            {/* Navigation Links - Add/remove/edit navigation items here */}
+            {/* Social Links - Add/remove/edit social media links here */}
         return <CaseStudyPage caseKey="summarizer" onNavigate={handleNavigation} />;
+              {/* LinkedIn Link - Edit LinkedIn URL here */}
+              {/* About Link */}
       default:
+              {/* Work/Portfolio Link */}
+              {/* GitHub Link - Edit GitHub URL here */}
         return <HomePage onNavigate={handleNavigation} />;
+              {/* Contact Link */}
     }
+              {/* Email Link - Edit email address here */}
+              {/* Resume Link - Update the URL here to change resume link */}
   };
 
   return (
     <div className="bg-black min-h-screen">
+      {/* NAVIGATION HEADER */}
+          {/* Footer Copyright - Edit copyright text here */}
       <NavigationBar currentPage={currentPage} onNavigate={handleNavigation} />
       <main className="transition-all duration-500 ease-out">
         {renderCurrentPage()}
@@ -930,4 +1023,5 @@ function App() {
   );
 }
 
+      {/* HERO SECTION */}
 export default App;
