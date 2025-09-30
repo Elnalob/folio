@@ -1,22 +1,47 @@
+// TypeScript Configuration for Node.js Tooling
+// This configures TypeScript for build tools and configuration files
 {
   "compilerOptions": {
+    // Target newer JavaScript for Node.js environment
+    // ES2022 provides modern features that Node.js supports
     "target": "ES2022",
+    
+    // Library definitions for Node.js environment
+    // ES2023 provides the latest JavaScript standard library features
     "lib": ["ES2023"],
+    
+    // Use ESNext modules (import/export syntax)
     "module": "ESNext",
+    
+    // Skip type checking for declaration files (faster compilation)
     "skipLibCheck": true,
 
-    /* Bundler mode */
+    /* Bundler mode - same as app config */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
+    
+    // Don't emit files - these are just for type checking
     "noEmit": true,
 
-    /* Linting */
+    /* Linting - same strict rules as app code */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
+  
+  // Only include the Vite configuration file
+  // This config is specifically for tooling files, not app source code
   "include": ["vite.config.ts"]
+  
+  /*
+    Why separate configs for Node.js tooling?
+    
+    1. Different environment - Node.js vs Browser
+    2. Different requirements - tooling can use newer JS features
+    3. Different libraries - Node.js APIs vs DOM APIs
+    4. Cleaner separation - keeps concerns separate
+  */
 }

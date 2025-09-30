@@ -1,7 +1,27 @@
+// Root TypeScript Configuration
+// This is the main TypeScript config that references other config files
 {
+  // No files are directly included in this config
+  // All compilation is handled by the referenced configs
   "files": [],
+  
+  // References to other TypeScript config files
+  // This allows you to have different configurations for different parts of your project
   "references": [
+    // Configuration for application source code (src/ directory)
     { "path": "./tsconfig.app.json" },
+    // Configuration for Node.js tooling files (like vite.config.ts)
     { "path": "./tsconfig.node.json" }
   ]
+  
+  /*
+    This setup is called "Project References" and provides several benefits:
+    
+    1. Faster builds - TypeScript can build projects in parallel
+    2. Better organization - separate configs for different parts of your codebase
+    3. Incremental compilation - only rebuild what changed
+    4. Clear boundaries - app code vs tooling code have different requirements
+    
+    The referenced configs inherit from this one but can override settings
+  */
 }

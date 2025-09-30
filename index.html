@@ -1,28 +1,99 @@
+<!-- HTML5 Document Type Declaration -->
 <!doctype html>
+<!-- Root HTML element with language attribute for accessibility -->
 <html lang="en">
   <head>
+    <!-- Character encoding - UTF-8 supports all Unicode characters -->
     <meta charset="UTF-8" />
+    
+    <!-- Favicon - the small icon shown in browser tabs -->
+    <!-- /vite.svg refers to a file in the public directory -->
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    
+    <!-- Viewport meta tag - essential for responsive design -->
+    <!-- width=device-width: use the device's actual width -->
+    <!-- initial-scale=1.0: don't zoom in or out initially -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Page title - shown in browser tab and search results -->
     <title>Bola Olaniyan - Product Designer Focused on User Impact & Business Outcomes</title>
+    
+    <!-- Meta description - used by search engines and social media -->
+    <!-- Should be 150-160 characters for optimal SEO -->
     <meta name="description" content="Product Designer with 6+ years experience helping startups design digital products that solve real problems, drive user adoption, and deliver measurable business results." />
+    
+    <!-- Keywords meta tag - less important for SEO now, but still useful -->
     <meta name="keywords" content="product designer, UI/UX designer, B2B SaaS, fintech design, dashboard design, startup design, user experience, business outcomes" />
+    
+    <!-- Author meta tag - identifies the page author -->
     <meta name="author" content="Bola Olaniyan" />
     
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph meta tags - control how content appears when shared on social media -->
+    <!-- These are used by Facebook, LinkedIn, and other platforms -->
+    
+    <!-- Content type - website, article, product, etc. -->
     <meta property="og:type" content="website" />
+    
+    <!-- Canonical URL - the main URL for this content -->
     <meta property="og:url" content="https://bola-olaniyan.com/" />
+    
+    <!-- Title for social sharing - can be different from page title -->
     <meta property="og:title" content="Bola Olaniyan - Product Designer" />
+    
+    <!-- Description for social sharing -->
     <meta property="og:description" content="Product Designer focused on user impact and business outcomes. 6+ years helping startups design products that users love." />
     
-    <!-- Twitter -->
+    <!-- Twitter Card meta tags - control how content appears on Twitter -->
+    
+    <!-- Card type - summary, summary_large_image, app, player -->
     <meta property="twitter:card" content="summary_large_image" />
+    
+    <!-- URL for Twitter sharing -->
     <meta property="twitter:url" content="https://bola-olaniyan.com/" />
+    
+    <!-- Title for Twitter sharing -->
     <meta property="twitter:title" content="Bola Olaniyan - Product Designer" />
+    
+    <!-- Description for Twitter sharing -->
     <meta property="twitter:description" content="Product Designer focused on user impact and business outcomes. 6+ years helping startups design products that users love." />
+    
+    <!--
+      Additional meta tags you might want to add:
+      
+      Image for social sharing:
+      <meta property="og:image" content="https://example.com/image.jpg" />
+      <meta property="twitter:image" content="https://example.com/image.jpg" />
+      
+      Theme color for mobile browsers:
+      <meta name="theme-color" content="#000000" />
+      
+      Prevent search engine indexing (for staging sites):
+      <meta name="robots" content="noindex, nofollow" />
+      
+      Canonical URL (prevents duplicate content issues):
+      <link rel="canonical" href="https://example.com/" />
+    -->
   </head>
   <body>
+    <!-- Root element where React will mount the application -->
+    <!-- This div is targeted by document.getElementById('root') in main.tsx -->
     <div id="root"></div>
+    
+    <!-- Script tag that loads the main JavaScript/TypeScript entry point -->
+    <!-- type="module" enables ES6 module syntax (import/export) -->
+    <!-- Vite will process this file and all its dependencies -->
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!--
+      The build process:
+      1. Vite processes /src/main.tsx
+      2. Follows all import statements to build a dependency graph
+      3. Transforms TypeScript to JavaScript
+      4. Processes CSS (including Tailwind)
+      5. Bundles everything for production or serves it in development
+      
+      In development: Files are served individually with hot reload
+      In production: Files are bundled, minified, and optimized
+    -->
   </body>
 </html>

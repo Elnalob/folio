@@ -1,3 +1,53 @@
+/* 
+  Tailwind CSS Directives
+  
+  These @tailwind directives inject Tailwind's styles into your CSS.
+  They must be included in this exact order.
+*/
+
+/* 
+  @tailwind base - Injects Tailwind's base styles
+  This includes:
+  - CSS reset/normalize styles
+  - Default styles for HTML elements
+  - Base typography styles
+*/
 @tailwind base;
+
+/* 
+  @tailwind components - Injects Tailwind's component classes
+  This includes:
+  - Pre-built component styles
+  - Any custom component classes you define with @apply
+*/
 @tailwind components;
+
+/* 
+  @tailwind utilities - Injects Tailwind's utility classes
+  This includes:
+  - All the utility classes like p-4, text-center, bg-blue-500, etc.
+  - Responsive variants (sm:, md:, lg:, xl:)
+  - State variants (hover:, focus:, active:, etc.)
+*/
 @tailwind utilities;
+
+/*
+  You can add custom CSS below this line.
+  
+  Examples:
+  
+  Custom component styles:
+  .my-custom-button {
+    @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600;
+  }
+  
+  Custom utility classes:
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  Global styles:
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+*/
