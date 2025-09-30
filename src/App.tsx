@@ -111,6 +111,15 @@ const NavigationBar: React.FC<{
               currentPage === 'about' ? 'w-full' : 'w-0 group-hover:w-full'
             }`}></span>
           </button>
+          <a
+            href="https://drive.google.com/file/d/1u-wFuPM3l1VTjYyKcIRaPsr1QEhn5nFT/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative text-sm font-medium transition-all duration-300 tracking-wide text-gray-300 hover:text-white group"
+          >
+            Resume
+            <span className="absolute -bottom-1 left-0 h-px bg-orange-400 transition-all duration-300 w-0 group-hover:w-full"></span>
+          </a>
           <button
             onClick={() => onNavigate('contact')}
             className={`relative text-sm font-medium transition-all duration-300 tracking-wide ${
@@ -166,6 +175,15 @@ const NavigationBar: React.FC<{
           >
             About
           </button>
+          <a
+            href="https://drive.google.com/file/d/1u-wFuPM3l1VTjYyKcIRaPsr1QEhn5nFT/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="block w-full text-left text-gray-300 hover:text-white transition-colors font-medium"
+          >
+            Resume
+          </a>
           <button
             onClick={() => {
               onNavigate('contact');
@@ -463,28 +481,6 @@ const AboutPage: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate 
                 </div>
                 
                 <div className="space-y-6">
-                  <div>
-                    <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Status</h4>
-                    <p className="text-gray-300">Available for new opportunities</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Location</h4>
-                    <p className="text-gray-300">Lagos, Nigeria (Remote-friendly)</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Experience</h4>
-                    <p className="text-gray-300">6+ years in product design</p>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Focus Areas</h4>
-                    <p className="text-gray-300 text-sm leading-relaxed">
-                      B2B SaaS • Fintech • Dashboard Design • Enterprise UX • Startup Growth
-                    </p>
-                  </div>
-
                   <div>
                     <h4 className="font-bold text-orange-400 mb-2 text-sm uppercase tracking-wider">Recent Impact</h4>
                     <p className="text-gray-300 text-sm leading-relaxed">
