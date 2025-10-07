@@ -1,74 +1,24 @@
-// TypeScript Configuration for Application Code
-// This file configures TypeScript compilation for your app source code
 {
-  // Compiler options - how TypeScript should compile your code
   "compilerOptions": {
-    // Target JavaScript version for compilation output
-    // ES2020 provides modern JavaScript features while maintaining good browser support
     "target": "ES2020",
-    
-    // Use define semantics for class fields (modern JavaScript behavior)
     "useDefineForClassFields": true,
-    
-    // Library definitions to include
-    // These provide type definitions for built-in JavaScript and browser APIs
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    
-    // Module system to use
-    // ESNext uses the latest ECMAScript module syntax (import/export)
     "module": "ESNext",
-    
-    // Skip type checking for declaration files (.d.ts)
-    // This speeds up compilation by trusting that library types are correct
     "skipLibCheck": true,
 
-    /* Bundler mode - optimized for modern bundlers like Vite */
-    
-    // Module resolution strategy
-    // "bundler" is optimized for modern bundlers that handle module resolution
+    /* Bundler mode */
     "moduleResolution": "bundler",
-    
-    // Allow importing TypeScript files with extensions (.ts, .tsx)
-    // Normally TypeScript doesn't allow this, but bundlers can handle it
     "allowImportingTsExtensions": true,
-    
-    // Each file is treated as a separate module
-    // This enables better tree-shaking and faster compilation
     "isolatedModules": true,
-    
-    // Force TypeScript to detect module format
-    // Helps with mixed CommonJS/ESM codebases
     "moduleDetection": "force",
-    
-    // Don't emit JavaScript files (let Vite handle compilation)
-    // TypeScript is only used for type checking
     "noEmit": true,
-    
-    // JSX transformation mode
-    // "react-jsx" uses the new JSX transform (React 17+)
-    // This means you don't need to import React in every file that uses JSX
     "jsx": "react-jsx",
 
-    /* Linting - strict type checking options */
-    
-    // Enable all strict type checking options
-    // This catches more potential errors but requires more explicit typing
+    /* Linting */
     "strict": true,
-    
-    // Error on unused local variables
-    // Helps keep code clean by catching variables that aren't used
     "noUnusedLocals": true,
-    
-    // Error on unused function parameters
-    // You can prefix parameters with _ to indicate they're intentionally unused
     "noUnusedParameters": true,
-    
-    // Error when switch statements don't handle all cases
-    // Helps catch bugs in switch statements
     "noFallthroughCasesInSwitch": true
   },
-  
-  // Files to include in compilation
-  // This tells TypeScript to compile all files in the src directory
   "include": ["src"]
 }
