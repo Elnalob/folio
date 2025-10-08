@@ -724,12 +724,42 @@ const CaseStudyPage: React.FC<{
 
   if (!study) return null;
 
+  // Different image sets for each case study
+  const caseStudyImages = {
+    auditbar: {
+      research: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      wireframes: 'https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      design: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      prototype: 'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      testing: 'https://images.pexels.com/photos/3184423/pexels-photo-3184423.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+    },
+    paysure: {
+      research: 'https://images.pexels.com/photos/5668772/pexels-photo-5668772.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      wireframes: 'https://images.pexels.com/photos/5673501/pexels-photo-5673501.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      design: 'https://images.pexels.com/photos/5632371/pexels-photo-5632371.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      prototype: 'https://images.pexels.com/photos/4968630/pexels-photo-4968630.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      testing: 'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+    },
+    summarizer: {
+      research: 'https://images.pexels.com/photos/8849295/pexels-photo-8849295.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      wireframes: 'https://images.pexels.com/photos/7376/startup-photos.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      design: 'https://images.pexels.com/photos/3861943/pexels-photo-3861943.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      prototype: 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+      testing: 'https://images.pexels.com/photos/7367/startup-photos.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
+    }
+  };
+
+  const images = caseStudyImages[caseKey as keyof typeof caseStudyImages];
+
   const sections = [
-    { title: 'Challenge', content: study.challenge, key: 'challenge' },
-    { title: 'Process', content: study.process, key: 'process' },
-    { title: 'Solution', content: study.solution, key: 'solution' },
-    { title: 'Impact', content: study.impact, key: 'impact' },
-    { title: 'Reflection', content: study.reflection, key: 'reflection' },
+    { title: 'The Challenge', content: study.challenge, key: 'challenge', type: 'text' },
+    { title: 'User Research', content: study.process, key: 'research', type: 'text-image', image: images.research },
+    { title: 'Information Architecture & Wireframes', content: 'I began by mapping out the user flows and creating low-fidelity wireframes to establish the core structure. This iterative process involved multiple rounds of feedback from stakeholders and potential users to ensure we were solving the right problems in the right way.', key: 'wireframes', type: 'image-text', image: images.wireframes },
+    { title: 'Visual Design System', content: 'I developed a comprehensive design system that balanced aesthetics with functionality. The color palette, typography, and component library were carefully chosen to ensure consistency across the platform while maintaining accessibility standards and brand identity.', key: 'design', type: 'text-image', image: images.design },
+    { title: 'High-Fidelity Prototypes', content: study.solution, key: 'prototype', type: 'image-full', image: images.prototype },
+    { title: 'User Testing & Iteration', content: 'Through multiple rounds of usability testing with real users, I identified pain points and opportunities for improvement. Each iteration was data-driven, focusing on measurable improvements in task completion rates and user satisfaction.', key: 'testing', type: 'text-image', image: images.testing },
+    { title: 'Results & Impact', content: study.impact, key: 'impact', type: 'text' },
+    { title: 'Key Learnings', content: study.reflection, key: 'reflection', type: 'text' },
   ];
 
   return (
@@ -799,35 +829,72 @@ const CaseStudyPage: React.FC<{
         </div>
       </div>
       {/* Case Study Sections */}
-      <div className="max-w-4xl mx-auto px-6 space-y-24 pb-24">
+      <div className="max-w-6xl mx-auto px-6 space-y-32 pb-24">
         {sections.map((section, index) => (
-          <div key={section.key} className="space-y-8">
-            <div className="space-y-4">
+          <div key={section.key} className="space-y-12">
+            <div className="space-y-4 text-center">
               <h2 className="text-4xl font-bold text-orange-400 tracking-tight">{section.title}</h2>
-              <div className="h-px w-16 bg-gradient-to-r from-orange-400 to-transparent"></div>
+              <div className="h-px w-16 bg-gradient-to-r from-orange-400 to-transparent mx-auto"></div>
             </div>
-            <div className="prose prose-lg prose-invert max-w-none">
-              {section.key === 'impact' ? (
-                <div className="space-y-4">
-                  {section.content.split('\n').map((line, lineIndex) => (
-                    line.trim() && (
-                      <p key={lineIndex} className="text-lg text-gray-300 leading-relaxed font-light flex items-start space-x-3">
-                        {line.startsWith('•') ? (
-                          <>
-                            <span className="text-orange-400 font-bold mt-1">•</span>
-                            <span>{line.substring(1).trim()}</span>
-                          </>
-                        ) : (
-                          <span>{line}</span>
-                        )}
-                      </p>
-                    )
-                  ))}
+
+            {section.type === 'text' && (
+              <div className="prose prose-lg prose-invert max-w-4xl mx-auto">
+                {section.key === 'impact' ? (
+                  <div className="space-y-4">
+                    {section.content.split('\n').map((line, lineIndex) => (
+                      line.trim() && (
+                        <p key={lineIndex} className="text-lg text-gray-300 leading-relaxed font-light flex items-start space-x-3">
+                          {line.startsWith('•') ? (
+                            <>
+                              <span className="text-orange-400 font-bold mt-1">•</span>
+                              <span>{line.substring(1).trim()}</span>
+                            </>
+                          ) : (
+                            <span>{line}</span>
+                          )}
+                        </p>
+                      )
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-lg text-gray-300 leading-relaxed font-light">{section.content}</p>
+                )}
+              </div>
+            )}
+
+            {section.type === 'text-image' && (
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="prose prose-lg prose-invert">
+                  <p className="text-lg text-gray-300 leading-relaxed font-light">{section.content}</p>
                 </div>
-              ) : (
-                <p className="text-lg text-gray-300 leading-relaxed font-light">{section.content}</p>
-              )}
-            </div>
+                <div className="relative rounded-3xl overflow-hidden border border-gray-700/50">
+                  <img className="w-full h-full object-cover transform hover:scale-105 transition-all duration-700" src={section.image} alt={section.title} />
+                </div>
+              </div>
+            )}
+
+            {section.type === 'image-text' && (
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="relative rounded-3xl overflow-hidden border border-gray-700/50 order-2 lg:order-1">
+                  <img className="w-full h-full object-cover transform hover:scale-105 transition-all duration-700" src={section.image} alt={section.title} />
+                </div>
+                <div className="prose prose-lg prose-invert order-1 lg:order-2">
+                  <p className="text-lg text-gray-300 leading-relaxed font-light">{section.content}</p>
+                </div>
+              </div>
+            )}
+
+            {section.type === 'image-full' && (
+              <div className="space-y-12">
+                <div className="prose prose-lg prose-invert max-w-4xl mx-auto">
+                  <p className="text-lg text-gray-300 leading-relaxed font-light">{section.content}</p>
+                </div>
+                <div className="relative rounded-3xl overflow-hidden border border-gray-700/50">
+                  <img className="w-full object-cover transform hover:scale-105 transition-all duration-700" src={section.image} alt={section.title} />
+                </div>
+              </div>
+            )}
+
             {index < sections.length - 1 && (
               <div className="pt-12">
                 <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"></div>
