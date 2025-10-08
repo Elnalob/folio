@@ -257,7 +257,7 @@ const HomePage: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }
 
             {/* Hero Visual - Enhanced AuditBar Mockup */}
              <div className="lg:col-span-5 relative">
-              <img className='relative transform hover:scale-105 transition-all duration-700 rounded-3xl' src="/App.png" alt="" />
+              <img className='relative transform hover:scale-105 transition-all duration-700 rounded-3xl' src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1" alt="" />
             {/*<div className="lg:col-span-5 relative">
               <div className="relative transform hover:scale-105 transition-all duration-700">
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent rounded-3xl blur-3xl"></div>
@@ -316,7 +316,7 @@ const HomePage: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }
               >
               <div className="space-y-6">
                 <div className="lg:col-span-5 relative">
-                  <img className='relative transform hover:scale-105 transition-all duration-700 rounded-3xl' src="/App.png" alt="" />
+                  <img className='relative transform hover:scale-105 transition-all duration-700 rounded-3xl' src={`https://images.pexels.com/photos/${index === 0 ? '3184298' : index === 1 ? '5965592' : '5935791'}/pexels-photo-${index === 0 ? '3184298' : index === 1 ? '5965592' : '5935791'}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1`} alt="" />
                 </div>
                 
                 <div className="space-y-4">
@@ -795,7 +795,7 @@ const CaseStudyPage: React.FC<{
 
         {/* Hero Visual */}
         <div className="lg:col-span-5 relative">
-              <img className='relative transform hover:scale-105 transition-all duration-700 rounded-3xl' src="/App.png" alt="" />
+              <img className='relative transform hover:scale-105 transition-all duration-700 rounded-3xl' src="https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1" alt="" />
         </div>
       </div>
       {/* Case Study Sections */}
