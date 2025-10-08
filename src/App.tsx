@@ -315,8 +315,8 @@ const HomePage: React.FC<{ onNavigate: (page: Page) => void }> = ({ onNavigate }
                 onClick={() => onNavigate(`case-${key}` as Page)}
               >
               <div className="space-y-6">
-                <div className="lg:col-span-5 relative">
-                  <img className='relative transform hover:scale-105 transition-all duration-700 rounded-3xl' src={`https://images.pexels.com/photos/${index === 0 ? '3184298' : index === 1 ? '5965592' : '5935791'}/pexels-photo-${index === 0 ? '3184298' : index === 1 ? '5965592' : '5935791'}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1`} alt="" />
+                <div className="lg:col-span-5 relative aspect-[4/3] overflow-hidden">
+                  <img className='relative w-full h-full object-cover transform hover:scale-105 transition-all duration-700 rounded-3xl' src={`https://images.pexels.com/photos/${index === 0 ? '3184298' : index === 1 ? '5965592' : '5935791'}/pexels-photo-${index === 0 ? '3184298' : index === 1 ? '5965592' : '5935791'}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1`} alt="" />
                 </div>
                 
                 <div className="space-y-4">
@@ -795,7 +795,7 @@ const CaseStudyPage: React.FC<{
 
         {/* Hero Visual */}
         <div className="lg:col-span-5 relative">
-              <img className='relative transform hover:scale-105 transition-all duration-700 rounded-3xl' src="https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1" alt="" />
+              <img className='relative transform hover:scale-105 transition-all duration-700 rounded-3xl' src={`https://images.pexels.com/photos/${caseKey === 'auditbar' ? '3184298' : caseKey === 'paysure' ? '5965592' : '5935791'}/pexels-photo-${caseKey === 'auditbar' ? '3184298' : caseKey === 'paysure' ? '5965592' : '5935791'}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1`} alt="" />
         </div>
       </div>
       {/* Case Study Sections */}
