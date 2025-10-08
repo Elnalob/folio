@@ -724,7 +724,20 @@ const CaseStudyPage: React.FC<{
 
   if (!study) return null;
 
-  // Different image sets for each case study
+  // 🎨 IMAGES FOR CASE STUDY SECTIONS
+  // Each case study has 5 images that appear in different sections:
+  // - research: appears in "User Research" section (text on left, image on right)
+  // - wireframes: appears in "Information Architecture & Wireframes" section (image on left, text on right)
+  // - design: appears in "Visual Design System" section (text on left, image on right)
+  // - prototype: appears in "High-Fidelity Prototypes" section (full-width image with text above)
+  // - testing: appears in "User Testing & Iteration" section (text on left, image on right)
+  //
+  // To change an image:
+  // 1. Go to pexels.com and find a new image
+  // 2. Copy the image URL (make sure it includes ?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1)
+  // 3. Replace the URL below for the case study and section you want to change
+  //
+  // Example: To change the research image for AuditBar, replace the URL in line 741
   const caseStudyImages = {
     auditbar: {
       research: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpm=1',
